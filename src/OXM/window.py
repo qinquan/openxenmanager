@@ -31,15 +31,12 @@ if os.path.dirname(sys.argv[0]):
 # On next releases we will use gettext for translations TODO: Investigate translations
 APP = 'oxc'
 DIR = 'locale'
-if sys.platform != "win32" and sys.platform != "darwin":
+if sys.platform != "win32":
     # If sys.platform is Linux or Unix
     import gtkvnc
     # Only needed for translations
     import gtk.glade
     gtk.glade.bindtextdomain(APP, DIR)
-elif sys.platform == "darwin":
-    # On MacOSX with macports sys.platform is "darwin", we need Popen for run tightvnc
-    from subprocess import Popen
 else:
     # On Windows we need right tightvnc and we need win32 libraries for move the window
     from subprocess import Popen
@@ -994,7 +991,7 @@ class oxcWindow(oxcWindowVM, oxcWindowHost, oxcWindowProperties,
                                 # TODO: Break here on error
                                 print 'Could not get a free port'
 
-                            if sys.platform != "win32" and sys.platform != "darwin":
+                            if sys.platform != "win32":
                                 # Create a gtkvnc object
                                 self.vnc = gtkvnc.Display()
                                 # Add to gtkvnc to a console area
@@ -1020,13 +1017,6 @@ class oxcWindow(oxcWindowVM, oxcWindowHost, oxcWindowProperties,
 
                                 self.vnc.connect("vnc-server-cut-text", self.vnc_button_release)
                                 self.vnc.open_host("localhost", str(port))
-
-                            elif sys.platform == "darwin":
-                                # Run ./vncviewer with host, vm renf and session ref
-                                viewer = self.config['options']['vnc_viewer']
-                                os.spawnl(os.P_NOWAIT, viewer, "vncviewer", "localhost::%s" % port)
-                                console_area = self.builder.get_object("console_area")
-                                console_alloc = console_area.get_allocation()
 
                             else:
                                 Thread(target=self.tunnel.listen, args=(port,)).start()
