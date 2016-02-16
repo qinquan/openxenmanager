@@ -45,6 +45,20 @@ OpenXenManager runs has been tested to run on Linux or Windows and should work
 on MacOSX as well.
 
 
+Installing OpenXenManager dependency using Homebrew
+======================
+To install dependency in Homebrew
+
+```bash
+brew install python libglade
+brew install pygtk --with-libglade
+brew install gettext
+brew link --force gettext
+brew tap qinquan/homebrew-virt-manager
+brew install gtk-vnc
+pip install configobj
+```
+
 Help / bug reports
 ==================
 
